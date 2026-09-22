@@ -1,0 +1,2722 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0f766e">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="لطف آبادی">
+<title>مدیریت فیلتر لطف آبادی</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:#f5f7fa;
+  color:#222;
+}
+
+header{
+  background:#0f766e;
+  color:#fff;
+  padding:18px 15px;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+header h1{
+  margin:0;
+  font-size:20px;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:12px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.stat{
+  background:#fff;
+  border-radius:12px;
+  padding:12px 5px;
+  text-align:center;
+  box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+.stat b{
+  display:block;
+  font-size:22px;
+  margin-bottom:5px;
+}
+
+.stat span{
+  font-size:12px;
+  color:#666;
+}
+
+.toolbar{
+  background:#fff;
+  padding:10px;
+  border-radius:12px;
+  margin-bottom:12px;
+  box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+
+input,select,textarea,button,a{
+  font-family:inherit;
+}
+
+input,select,textarea{
+  width:100%;
+  border:1px solid #ddd;
+  border-radius:9px;
+  padding:11px;
+  font-size:14px;
+  background:#fff;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.search{
+  margin-bottom:8px;
+}
+
+.filters{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+}
+
+.filters button{
+  border:0;
+  border-radius:8px;
+  padding:10px 4px;
+  background:#e5e7eb;
+  cursor:pointer;
+}
+
+.filters button.active{
+  background:#0f766e;
+  color:#fff;
+}
+
+.customer{
+  background:#fff;
+  border-radius:13px;
+  margin-bottom:10px;
+  padding:13px;
+  box-shadow:0 1px 6px rgba(0,0,0,.08);
+}
+
+.customer-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.customer-name{
+  font-weight:bold;
+  font-size:16px;
+}
+
+.phone{
+  color:#0f766e;
+  direction:ltr;
+  text-align:right;
+}
+
+.info{
+  margin-top:8px;
+  line-height:1.9;
+  font-size:13px;
+  color:#555;
+}
+
+.status{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:7px;
+  font-size:12px;
+  margin-top:6px;
+  white-space:nowrap;
+}
+
+.status.green{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.status.yellow{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.status.red{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.status.orange{
+  background:#ffedd5;
+  color:#c2410c;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+  margin-top:10px;
+}
+
+button{
+  border:0;
+  border-radius:8px;
+  padding:9px;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.btn-primary{
+  background:#0f766e;
+  color:#fff;
+}
+
+.btn-blue{
+  background:#2563eb;
+  color:#fff;
+}
+
+.btn-orange{
+  background:#ea580c;
+  color:#fff;
+}
+
+.btn-red{
+  background:#dc2626;
+  color:#fff;
+}
+
+.btn-call{
+  background:#16a34a;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+}
+
+.btn-message{
+  background:#0891b2;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+}
+
+.btn-gray{
+  background:#e5e7eb;
+}
+
+.fab{
+  position:fixed;
+  left:18px;
+  bottom:18px;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:#0f766e;
+  color:#fff;
+  font-size:28px;
+  box-shadow:0 4px 15px rgba(0,0,0,.25);
+  z-index:20;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:50;
+  overflow:auto;
+  padding:15px;
+}
+
+.modal-box{
+  background:#fff;
+  max-width:600px;
+  margin:30px auto;
+  border-radius:15px;
+  padding:18px;
+}
+
+.modal-title{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.form-row{
+  margin-bottom:10px;
+}
+
+.form-row label{
+  display:block;
+  margin-bottom:5px;
+  font-size:13px;
+}
+
+.modal-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:15px;
+}
+
+.history-item{
+  background:#f8fafc;
+  border-radius:10px;
+  padding:10px;
+  margin-bottom:8px;
+  border:1px solid #eee;
+}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  color:#777;
+}
+
+.offline{
+  position:fixed;
+  right:10px;
+  bottom:10px;
+  background:#dc2626;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:20px;
+  font-size:12px;
+  z-index:100;
+  display:none;
+}
+
+.online{
+  position:fixed;
+  right:10px;
+  bottom:10px;
+  background:#16a34a;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:20px;
+  font-size:12px;
+  z-index:100;
+  display:none;
+}
+
+@media(max-width:700px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .filters{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .actions{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>مدیریت فیلتر لطف آبادی</h1>
+</header>
+
+<div class="container">
+
+  <div class="stats">
+
+    <div class="stat">
+      <b id="statAll">0</b>
+      <span>کل مشتریان</span>
+    </div>
+
+    <div class="stat">
+      <b id="statDue">0</b>
+      <span>موعد رسیده</span>
+    </div>
+
+    <div class="stat">
+      <b id="statNear">0</b>
+      <span>نزدیک موعد</span>
+    </div>
+
+    <div class="stat">
+      <b id="statLate">0</b>
+      <span>یک ماه گذشته</span>
+    </div>
+
+  </div>
+
+  <div class="toolbar">
+
+    <input
+      id="search"
+      class="search"
+      placeholder="جستجوی نام یا شماره مشتری..."
+      oninput="renderCustomers()"
+    >
+
+    <div class="filters">
+
+      <button
+        id="filterAll"
+        class="active"
+        onclick="setFilter('all')"
+      >
+        همه
+      </button>
+
+      <button
+        id="filterDue"
+        onclick="setFilter('due')"
+      >
+        موعد رسیده
+      </button>
+
+      <button
+        id="filterNear"
+        onclick="setFilter('near')"
+      >
+        کمتر از ۷ روز
+      </button>
+
+      <button
+        id="filterLate"
+        onclick="setFilter('late')"
+      >
+        یک ماه گذشته
+      </button>
+
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+      <button class="btn-primary" onclick="exportBackup()">💾 بکاپ اطلاعات</button>
+      <button class="btn-gray" onclick="document.getElementById('importFile').click()">📥 بازیابی بکاپ</button>
+    </div>
+    <input id="importFile" type="file" accept="application/json,.json" style="display:none" onchange="importBackup(this.files[0])">
+
+  </div>
+
+  <div id="customers"></div>
+
+</div>
+
+<button
+  class="fab"
+  onclick="openCustomerModal()"
+>
+  +
+</button>
+
+<div id="offlineBox" class="offline" style="display:block;background:#475569">💾 ذخیره روی همین دستگاه</div>
+<div id="onlineBox" class="online">آفلاین مستقل</div>
+
+<!-- CUSTOMER MODAL -->
+
+<div id="customerModal" class="modal">
+
+  <div class="modal-box">
+
+    <div
+      class="modal-title"
+      id="customerModalTitle"
+    >
+      افزودن مشتری
+    </div>
+
+    <input
+      type="hidden"
+      id="customerId"
+    >
+
+    <div class="form-row">
+      <label>نام مشتری</label>
+      <input
+        id="name"
+        placeholder="مثلاً علی رضایی"
+      >
+    </div>
+
+    <div class="form-row">
+      <label>شماره تماس</label>
+      <input
+        id="phone"
+        placeholder="09120000000"
+      >
+    </div>
+
+    <div class="form-row">
+      <label>آدرس</label>
+      <input
+        id="address"
+        placeholder="آدرس مشتری"
+      >
+    </div>
+
+    <div class="form-row">
+      <label>مدل دستگاه</label>
+      <input
+        id="deviceModel"
+        placeholder="RO"
+      >
+    </div>
+
+    <div class="form-row">
+      <label>تاریخ نصب دستگاه</label>
+      <input
+        id="installDate"
+        placeholder="1405/01/01"
+      >
+    </div>
+
+    <div class="form-row">
+      <label>آخرین سرویس</label>
+      <input
+        id="lastService"
+        placeholder="1405/06/29"
+      >
+    </div>
+
+    <div class="form-row">
+      <label>فاصله سرویس</label>
+
+      <select id="serviceInterval">
+
+        <option value="3">
+          هر ۳ ماه
+        </option>
+
+        <option value="6">
+          هر ۶ ماه
+        </option>
+
+      </select>
+    </div>
+
+    <div class="form-row">
+
+      <label>TDS آخرین سرویس</label>
+
+      <input
+        id="lastTds"
+        type="number"
+        placeholder="مثلاً 180"
+      >
+
+    </div>
+
+    <div class="form-row">
+
+      <label>توضیحات</label>
+
+      <textarea
+        id="notes"
+        placeholder="توضیحات مشتری"
+      ></textarea>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn-primary"
+        onclick="saveCustomer()"
+      >
+        ذخیره
+      </button>
+
+      <button
+        class="btn-gray"
+        onclick="closeModal('customerModal')"
+      >
+        انصراف
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- SERVICE MODAL -->
+
+<div id="serviceModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-title">
+      ثبت سرویس
+    </div>
+
+    <input
+      type="hidden"
+      id="serviceCustomerId"
+    >
+
+    <div
+      id="serviceCustomerName"
+      style="margin-bottom:12px;font-weight:bold"
+    ></div>
+
+    <div class="form-row">
+
+      <label>تاریخ سرویس</label>
+
+      <input
+        id="serviceDate"
+        placeholder="1405/06/29"
+      >
+
+    </div>
+
+    <div class="form-row">
+
+      <label>TDS</label>
+
+      <input
+        id="serviceTds"
+        type="number"
+        placeholder="مثلاً 180"
+      >
+
+    </div>
+
+    <div class="form-row">
+
+      <label>فاصله سرویس بعدی</label>
+
+      <select id="serviceIntervalModal">
+
+        <option value="3">
+          ۳ ماه
+        </option>
+
+        <option value="6">
+          ۶ ماه
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn-primary"
+        onclick="registerService()"
+      >
+        ثبت سرویس
+      </button>
+
+      <button
+        class="btn-gray"
+        onclick="closeModal('serviceModal')"
+      >
+        انصراف
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- HISTORY MODAL -->
+
+<div id="historyModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-title">
+      سابقه سرویس
+    </div>
+
+    <div id="historyContent"></div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn-gray"
+        onclick="closeModal('historyModal')"
+      >
+        بستن
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+var DB_NAME = "lotfabadi_filter_db";
+var DB_VERSION = 6;
+
+var customers = [];
+
+var serviceHistory = [];
+
+var currentFilter = "all";
+
+/* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function isNumberChar(ch){
+  return ch >= "0" && ch <= "9";
+}
+
+function onlyAsciiNumbers(value){
+
+  var s = String(value || "");
+  var result = "";
+
+  for(var i = 0; i < s.length; i++){
+
+    var code = s.charCodeAt(i);
+
+    if(code >= 48 && code <= 57){
+
+      result += s.charAt(i);
+
+    }else if(code >= 1776 && code <= 1785){
+
+      result += String(code - 1776);
+
+    }else if(code >= 1632 && code <= 1641){
+
+      result += String(code - 1632);
+
+    }
+
+  }
+
+  return result;
+}
+
+function parseDateParts(value){
+
+  if(!value){
+    return null;
+  }
+
+  var s = String(value).trim();
+
+  s = s.split("T")[0];
+  s = s.split(" ")[0];
+  s = s.replaceAll("-","/");
+
+  var parts = s.split("/");
+
+  if(parts.length < 3){
+    return null;
+  }
+
+  var y = Number(
+    onlyAsciiNumbers(parts[0])
+  );
+
+  var m = Number(
+    onlyAsciiNumbers(parts[1])
+  );
+
+  var d = Number(
+    onlyAsciiNumbers(parts[2])
+  );
+
+  if(!y || !m || !d){
+    return null;
+  }
+
+  return {
+    y:y,
+    m:m,
+    d:d
+  };
+}
+
+function formatJalali(y,m,d){
+
+  return (
+    String(y).padStart(4,"0") +
+    "/" +
+    String(m).padStart(2,"0") +
+    "/" +
+    String(d).padStart(2,"0")
+  );
+}
+
+/* =========================================================
+   GREGORIAN -> JALALI
+========================================================= */
+
+function gregorianToJalali(gy,gm,gd){
+
+  var gDaysInMonth = [
+    31,28,31,30,31,30,
+    31,31,30,31,30,31
+  ];
+
+  var jDaysInMonth = [
+    31,31,31,31,31,31,
+    30,30,30,30,30,29
+  ];
+
+  var gy2 = gy - 1600;
+  var gm2 = gm - 1;
+  var gd2 = gd - 1;
+
+  var gDayNo =
+    365 * gy2 +
+    Math.floor((gy2 + 3) / 4) -
+    Math.floor((gy2 + 99) / 100) +
+    Math.floor((gy2 + 399) / 400);
+
+  for(var i = 0; i < gm2; i++){
+    gDayNo += gDaysInMonth[i];
+  }
+
+  if(
+    gm2 > 1 &&
+    (
+      gy % 4 === 0 &&
+      (
+        gy % 100 !== 0 ||
+        gy % 400 === 0
+      )
+    )
+  ){
+    gDayNo++;
+  }
+
+  gDayNo += gd2;
+
+  var jDayNo =
+    gDayNo - 79;
+
+  var jNp =
+    Math.floor(jDayNo / 12053);
+
+  jDayNo =
+    jDayNo % 12053;
+
+  var jy =
+    979 +
+    33 * jNp +
+    4 * Math.floor(jDayNo / 1461);
+
+  jDayNo =
+    jDayNo % 1461;
+
+  if(jDayNo >= 366){
+
+    jy +=
+      Math.floor(
+        (jDayNo - 1) / 365
+      );
+
+    jDayNo =
+      (jDayNo - 1) % 365;
+  }
+
+  var jm = 0;
+
+  while(
+    jm < 11 &&
+    jDayNo >= jDaysInMonth[jm]
+  ){
+
+    jDayNo -=
+      jDaysInMonth[jm];
+
+    jm++;
+  }
+
+  var jd =
+    jDayNo + 1;
+
+  return formatJalali(
+    jy,
+    jm + 1,
+    jd
+  );
+}
+
+/* =========================================================
+   JALALI -> GREGORIAN
+========================================================= */
+
+function jalaliToGregorian(jy,jm,jd){
+
+  var jy2 =
+    jy - 979;
+
+  var jDayNo =
+    365 * jy2 +
+    Math.floor(jy2 / 33) * 8 +
+    Math.floor(
+      ((jy2 % 33) + 3) / 4
+    );
+
+  for(
+    var i = 1;
+    i < jm;
+    i++
+  ){
+
+    if(i <= 6){
+      jDayNo += 31;
+    }else{
+      jDayNo += 30;
+    }
+
+  }
+
+  jDayNo += jd - 1;
+
+  var gDayNo =
+    jDayNo + 79;
+
+  var gy =
+    1600 +
+    400 *
+    Math.floor(
+      gDayNo / 146097
+    );
+
+  gDayNo =
+    gDayNo % 146097;
+
+  var leap = true;
+
+  if(gDayNo >= 36525){
+
+    gDayNo--;
+
+    gy +=
+      100 *
+      Math.floor(
+        gDayNo / 36524
+      );
+
+    gDayNo =
+      gDayNo % 36524;
+
+    if(gDayNo >= 365){
+
+      gDayNo++;
+
+    }else{
+
+      leap = false;
+
+    }
+  }
+
+  gy +=
+    4 *
+    Math.floor(
+      gDayNo / 1461
+    );
+
+  gDayNo =
+    gDayNo % 1461;
+
+  if(gDayNo >= 366){
+
+    leap = false;
+
+    gDayNo--;
+
+    gy +=
+      Math.floor(
+        gDayNo / 365
+      );
+
+    gDayNo =
+      gDayNo % 365;
+  }
+
+  var monthDays = [
+    31,
+    leap ? 29 : 28,
+    31,30,31,30,
+    31,31,30,31,30,31
+  ];
+
+  var gm = 0;
+
+  while(
+    gm < 12 &&
+    gDayNo >= monthDays[gm]
+  ){
+
+    gDayNo -=
+      monthDays[gm];
+
+    gm++;
+  }
+
+  var gd =
+    gDayNo + 1;
+
+  return {
+    y:gy,
+    m:gm + 1,
+    d:gd
+  };
+}
+
+/* =========================================================
+   ADD MONTHS
+========================================================= */
+
+function jalaliDaysInMonth(y,m){
+
+  if(m <= 6){
+    return 31;
+  }
+
+  if(m <= 11){
+    return 30;
+  }
+
+  var nextYearGregorian =
+    jalaliToGregorian(
+      y + 1,
+      1,
+      1
+    );
+
+  var currentYearGregorian =
+    jalaliToGregorian(
+      y,
+      1,
+      1
+    );
+
+  var date1 =
+    Date.UTC(
+      currentYearGregorian.y,
+      currentYearGregorian.m - 1,
+      currentYearGregorian.d
+    );
+
+  var date2 =
+    Date.UTC(
+      nextYearGregorian.y,
+      nextYearGregorian.m - 1,
+      nextYearGregorian.d
+    );
+
+  var days =
+    Math.round(
+      (date2 - date1) /
+      86400000
+    );
+
+  return days === 366
+    ? 30
+    : 29;
+}
+
+function addJalaliMonths(dateString,months){
+
+  var p =
+    parseDateParts(dateString);
+
+  if(!p){
+    return "";
+  }
+
+  var total =
+    p.y * 12 +
+    (p.m - 1) +
+    Number(months || 0);
+
+  var y =
+    Math.floor(total / 12);
+
+  var m =
+    total % 12 + 1;
+
+  var maxDay =
+    jalaliDaysInMonth(y,m);
+
+  var d =
+    Math.min(
+      p.d,
+      maxDay
+    );
+
+  return formatJalali(
+    y,
+    m,
+    d
+  );
+}
+
+/* =========================================================
+   TODAY JALALI
+========================================================= */
+
+function todayJalali(){
+
+  try{
+
+    var formatter =
+      new Intl.DateTimeFormat(
+        "en-US-u-ca-persian",
+        {
+          year:"numeric",
+          month:"2-digit",
+          day:"2-digit",
+          timeZone:"Asia/Tehran"
+        }
+      );
+
+    var parts =
+      formatter.formatToParts(
+        new Date()
+      );
+
+    var y = "";
+    var m = "";
+    var d = "";
+
+    for(
+      var i = 0;
+      i < parts.length;
+      i++
+    ){
+
+      if(parts[i].type === "year"){
+        y = parts[i].value;
+      }
+
+      if(parts[i].type === "month"){
+        m = parts[i].value;
+      }
+
+      if(parts[i].type === "day"){
+        d = parts[i].value;
+      }
+
+    }
+
+    y = onlyAsciiNumbers(y);
+    m = onlyAsciiNumbers(m);
+    d = onlyAsciiNumbers(d);
+
+    return formatJalali(
+      Number(y),
+      Number(m),
+      Number(d)
+    );
+
+  }catch(e){
+
+    var now =
+      new Date();
+
+    return gregorianToJalali(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      now.getDate()
+    );
+  }
+}
+
+/* =========================================================
+   DISPLAY DATE
+========================================================= */
+
+function displayJalali(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ""
+  ){
+    return "";
+  }
+
+  var s =
+    String(value).trim();
+
+  var p =
+    parseDateParts(s);
+
+  if(!p){
+    return s;
+  }
+
+  if(
+    p.y >= 1200 &&
+    p.y <= 1600
+  ){
+
+    return formatJalali(
+      p.y,
+      p.m,
+      p.d
+    );
+
+  }
+
+  if(
+    p.y >= 1900 &&
+    p.y <= 2200
+  ){
+
+    return gregorianToJalali(
+      p.y,
+      p.m,
+      p.d
+    );
+  }
+
+  return s;
+}
+
+/* =========================================================
+   NORMALIZE DATE
+========================================================= */
+
+function normalizeDateForStorage(value){
+
+  if(!value){
+    return "";
+  }
+
+  var p =
+    parseDateParts(value);
+
+  if(!p){
+    return "";
+  }
+
+  if(
+    p.y >= 1200 &&
+    p.y <= 1600
+  ){
+
+    return formatJalali(
+      p.y,
+      p.m,
+      p.d
+    );
+  }
+
+  if(
+    p.y >= 1900 &&
+    p.y <= 2200
+  ){
+
+    return gregorianToJalali(
+      p.y,
+      p.m,
+      p.d
+    );
+  }
+
+  return "";
+}
+
+/* =========================================================
+   DATE SERIAL
+========================================================= */
+
+function jalaliSerial(value){
+
+  var p =
+    parseDateParts(
+      displayJalali(value)
+    );
+
+  if(!p){
+    return 0;
+  }
+
+  var days =
+    p.y * 365;
+
+  if(p.m <= 6){
+
+    days +=
+      (p.m - 1) * 31;
+
+  }else{
+
+    days +=
+      186 +
+      (p.m - 7) * 30;
+
+  }
+
+  days += p.d;
+
+  return days;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function getStatus(c){
+
+  if(!c.next_service){
+
+    return {
+      text:"⚪ تاریخ مشخص نیست",
+      cls:""
+    };
+
+  }
+
+  var today =
+    jalaliSerial(
+      todayJalali()
+    );
+
+  var dueDate =
+    displayJalali(
+      c.next_service
+    );
+
+  var due =
+    jalaliSerial(
+      dueDate
+    );
+
+  var diff =
+    due - today;
+
+  if(diff > 7){
+
+    return {
+      text:"🟢 موعد نرسیده",
+      cls:"green"
+    };
+
+  }
+
+  if(diff > 0){
+
+    return {
+      text:"🟡 کمتر از ۷ روز مانده",
+      cls:"yellow"
+    };
+
+  }
+
+  var oneMonthLater =
+    jalaliSerial(
+      addJalaliMonths(
+        dueDate,
+        1
+      )
+    );
+
+  if(today < oneMonthLater){
+
+    return {
+      text:"🔴 موعد رسیده",
+      cls:"red"
+    };
+
+  }
+
+  return {
+    text:"🟠 یک ماه گذشته",
+    cls:"orange"
+  };
+}
+
+function isLate(c){
+
+  if(!c.next_service){
+    return false;
+  }
+
+  var today =
+    jalaliSerial(
+      todayJalali()
+    );
+
+  var dueDate =
+    displayJalali(
+      c.next_service
+    );
+
+  var oneMonthLater =
+    jalaliSerial(
+      addJalaliMonths(
+        dueDate,
+        1
+      )
+    );
+
+  return today >= oneMonthLater;
+}
+
+/* =========================================================
+   INDEXED DB
+========================================================= */
+
+function openDB(){
+
+  return new Promise(
+    function(resolve,reject){
+
+      var request =
+        indexedDB.open(
+          DB_NAME,
+          DB_VERSION
+        );
+
+      request.onupgradeneeded =
+        function(event){
+
+          var db =
+            event.target.result;
+
+          if(
+            !db.objectStoreNames.contains(
+              "customers"
+            )
+          ){
+
+            db.createObjectStore(
+              "customers",
+              {
+                keyPath:"id"
+              }
+            );
+          }
+
+          if(
+            !db.objectStoreNames.contains(
+              "history"
+            )
+          ){
+
+            db.createObjectStore(
+              "history",
+              {
+                keyPath:"id"
+              }
+            );
+          }
+
+          if(
+            !db.objectStoreNames.contains(
+              "queue"
+            )
+          ){
+
+            db.createObjectStore(
+              "queue",
+              {
+                keyPath:"id",
+                autoIncrement:true
+              }
+            );
+          }
+        };
+
+      request.onsuccess =
+        function(){
+
+          resolve(
+            request.result
+          );
+
+        };
+
+      request.onerror =
+        function(){
+
+          reject(
+            request.error
+          );
+
+        };
+
+    }
+  );
+}
+
+async function dbPut(storeName,data){
+
+  var db =
+    await openDB();
+
+  return new Promise(
+    function(resolve,reject){
+
+      var tx =
+        db.transaction(
+          storeName,
+          "readwrite"
+        );
+
+      tx.objectStore(
+        storeName
+      ).put(data);
+
+      tx.oncomplete =
+        function(){
+          resolve();
+        };
+
+      tx.onerror =
+        function(){
+          reject(tx.error);
+        };
+
+    }
+  );
+}
+
+async function dbGetAll(storeName){
+
+  var db =
+    await openDB();
+
+  return new Promise(
+    function(resolve,reject){
+
+      var tx =
+        db.transaction(
+          storeName,
+          "readonly"
+        );
+
+      var request =
+        tx.objectStore(
+          storeName
+        ).getAll();
+
+      request.onsuccess =
+        function(){
+
+          resolve(
+            request.result || []
+          );
+
+        };
+
+      request.onerror =
+        function(){
+
+          reject(
+            request.error
+          );
+
+        };
+
+    }
+  );
+}
+
+async function dbClear(storeName){
+
+  var db =
+    await openDB();
+
+  return new Promise(
+    function(resolve,reject){
+
+      var tx =
+        db.transaction(
+          storeName,
+          "readwrite"
+        );
+
+      tx.objectStore(
+        storeName
+      ).clear();
+
+      tx.oncomplete =
+        function(){
+          resolve();
+        };
+
+      tx.onerror =
+        function(){
+          reject(tx.error);
+        };
+
+    }
+  );
+}
+
+/* =========================================================
+   LOCAL DATA
+========================================================= */
+
+async function saveCustomersLocal(list){
+
+  await dbClear("customers");
+
+  for(
+    var i = 0;
+    i < list.length;
+    i++
+  ){
+
+    var item =
+      Object.assign(
+        {},
+        list[i]
+      );
+
+    if(
+      item.id === undefined ||
+      item.id === null ||
+      item.id === ""
+    ){
+
+      item.id =
+        "server-customer-" +
+        Date.now() +
+        "-" +
+        i;
+    }
+
+    await dbPut(
+      "customers",
+      item
+    );
+  }
+}
+
+async function saveHistoryLocal(list){
+
+  await dbClear("history");
+
+  for(
+    var i = 0;
+    i < list.length;
+    i++
+  ){
+
+    var item =
+      Object.assign(
+        {},
+        list[i]
+      );
+
+    if(
+      item.id === undefined ||
+      item.id === null ||
+      item.id === ""
+    ){
+
+      item.id =
+        "server-history-" +
+        String(
+          item.customer_id ||
+          "unknown"
+        ) +
+        "-" +
+        String(
+          item.service_date ||
+          "unknown"
+        ) +
+        "-" +
+        i;
+    }
+
+    await dbPut(
+      "history",
+      item
+    );
+  }
+}
+
+/* =========================================================
+   SAVE ONE CUSTOMER HISTORY LOCALLY
+========================================================= */
+
+async function saveCustomerHistoryLocal(
+  customerId,
+  list
+){
+
+  var allHistory =
+    await dbGetAll(
+      "history"
+    );
+
+  var newHistory = [];
+
+  for(
+    var i = 0;
+    i < allHistory.length;
+    i++
+  ){
+
+    if(
+      String(
+        allHistory[i].customer_id
+      ) !==
+      String(customerId)
+    ){
+
+      newHistory.push(
+        allHistory[i]
+      );
+    }
+  }
+
+  for(
+    var j = 0;
+    j < list.length;
+    j++
+  ){
+
+    var item =
+      Object.assign(
+        {},
+        list[j]
+      );
+
+    if(
+      item.id === undefined ||
+      item.id === null ||
+      item.id === ""
+    ){
+
+      item.id =
+        "server-history-" +
+        String(
+          item.customer_id ||
+          customerId
+        ) +
+        "-" +
+        String(
+          item.service_date ||
+          ""
+        );
+    }
+
+    newHistory.push(
+      item
+    );
+  }
+
+  await dbClear(
+    "history"
+  );
+
+  for(
+    var k = 0;
+    k < newHistory.length;
+    k++
+  ){
+
+    await dbPut(
+      "history",
+      newHistory[k]
+    );
+  }
+
+  serviceHistory =
+    newHistory;
+}
+
+/* =========================================================
+   QUEUE
+========================================================= */
+
+async function queueOperation(operation){
+
+  await dbPut(
+    "queue",
+    {
+      created_at:Date.now(),
+      operation:operation
+    }
+  );
+}
+
+async function getQueue(){
+
+  return await dbGetAll(
+    "queue"
+  );
+}
+
+async function removeQueueItem(id){
+
+  var db =
+    await openDB();
+
+  return new Promise(
+    function(resolve,reject){
+
+      var tx =
+        db.transaction(
+          "queue",
+          "readwrite"
+        );
+
+      tx.objectStore(
+        "queue"
+      ).delete(id);
+
+      tx.oncomplete =
+        function(){
+          resolve();
+        };
+
+      tx.onerror =
+        function(){
+          reject(tx.error);
+        };
+
+    }
+  );
+}
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadServerData(){
+  customers=await dbGetAll("customers");
+  serviceHistory=await dbGetAll("history");
+  renderCustomers();
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value){
+
+  var s =
+    String(value);
+
+  s =
+    s.split("&").join("&amp;");
+
+  s =
+    s.split("<").join("&lt;");
+
+  s =
+    s.split(">").join("&gt;");
+
+  s =
+    s.split('"').join("&quot;");
+
+  s =
+    s.split("'").join("&#039;");
+
+  return s;
+}
+
+/* =========================================================
+   CUSTOMER ID SAFE
+========================================================= */
+
+function safeId(value){
+
+  return String(value)
+    .split("\\").join("\\\\")
+    .split("'").join("\\'");
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderCustomers(){
+
+  var container =
+    document.getElementById(
+      "customers"
+    );
+
+  var search =
+    document.getElementById(
+      "search"
+    ).value
+    .trim()
+    .toLowerCase();
+
+  var list =
+    customers.filter(
+      function(c){
+
+        var status =
+          getStatus(c);
+
+        var matchFilter =
+          true;
+
+        if(
+          currentFilter === "due"
+        ){
+
+          matchFilter =
+            status.cls === "red";
+        }
+
+        if(
+          currentFilter === "near"
+        ){
+
+          matchFilter =
+            status.cls === "yellow";
+        }
+
+        if(
+          currentFilter === "late"
+        ){
+
+          matchFilter =
+            status.cls === "orange";
+        }
+
+        var name =
+          String(
+            c.Name || ""
+          ).toLowerCase();
+
+        var phone =
+          String(
+            c.Phone || ""
+          ).toLowerCase();
+
+        var matchSearch =
+          !search ||
+          name.indexOf(search) !== -1 ||
+          phone.indexOf(search) !== -1;
+
+        return (
+          matchFilter &&
+          matchSearch
+        );
+      }
+    );
+
+  if(!list.length){
+
+    container.innerHTML =
+      '<div class="empty">مشتری‌ای پیدا نشد</div>';
+
+    updateStats();
+
+    return;
+  }
+
+  var html = "";
+
+  for(
+    var i = 0;
+    i < list.length;
+    i++
+  ){
+
+    var c =
+      list[i];
+
+    var status =
+      getStatus(c);
+
+    var id =
+      safeId(c.id);
+
+    var customerPhone =
+      String(
+        c.Phone || ""
+      ).trim();
+
+    var messageText =
+      "سلام وقت بخیر 🌹 لطف ابادی هستم\n" +
+      "یادآوری تعویض فیلتر دستگاه تصفیه آب شماست.\n" +
+      "ممنون لطف ابادی 🙏🏻";
+
+    var callButton = "";
+    var messageButton = "";
+
+    if(customerPhone){
+
+      callButton =
+        '<a class="btn-call" href="tel:' +
+        encodeURIComponent(
+          customerPhone
+        ) +
+        '">' +
+        '📞 تماس' +
+        '</a>';
+
+      messageButton =
+        '<a class="btn-message" href="sms:' +
+        encodeURIComponent(
+          customerPhone
+        ) +
+        '?body=' +
+        encodeURIComponent(
+          messageText
+        ) +
+        '">' +
+        '💬 پیام' +
+        '</a>';
+    }
+
+    html +=
+      '<div class="customer">' +
+
+      '<div class="customer-head">' +
+
+      '<div>' +
+
+      '<div class="customer-name">' +
+
+      escapeHtml(
+        c.Name || "بدون نام"
+      ) +
+
+      '</div>' +
+
+      '<div class="phone">' +
+
+      escapeHtml(
+        c.Phone || ""
+      ) +
+
+      '</div>' +
+
+      '</div>' +
+
+      '<span class="status ' +
+      status.cls +
+      '">' +
+
+      status.text +
+
+      '</span>' +
+
+      '</div>' +
+
+      '<div class="info">' +
+
+      '<div>📍 ' +
+      escapeHtml(
+        c.Address || "-"
+      ) +
+      '</div>' +
+
+      '<div>⚙️ دستگاه: ' +
+      escapeHtml(
+        c.Device_model || "-"
+      ) +
+      '</div>' +
+
+      '<div>🔧 آخرین سرویس: ' +
+      displayJalali(
+        c.last_service || ""
+      ) +
+      '</div>' +
+
+      '<div>📅 موعد بعدی: ' +
+      displayJalali(
+        c.next_service || ""
+      ) +
+      '</div>' +
+
+      '<div>📏 TDS: ' +
+
+      escapeHtml(
+        c.last_tds === null ||
+        c.last_tds === undefined ||
+        c.last_tds === ""
+          ? "-"
+          : String(c.last_tds)
+      ) +
+
+      '</div>' +
+
+      '</div>' +
+
+      '<div class="actions">' +
+
+      '<button class="btn-primary" onclick="openServiceModal(\'' +
+      id +
+      '\')">' +
+      'ثبت سرویس' +
+      '</button>' +
+
+      '<button class="btn-blue" onclick="editCustomer(\'' +
+      id +
+      '\')">' +
+      'ویرایش' +
+      '</button>' +
+
+      '<button class="btn-orange" onclick="showHistory(\'' +
+      id +
+      '\')">' +
+      'سابقه' +
+      '</button>' +
+
+      '<button class="btn-red" onclick="deleteCustomer(\'' +
+      id +
+      '\')">' +
+      'حذف' +
+      '</button>' +
+
+      callButton +
+
+      messageButton +
+
+      '</div>' +
+
+      '</div>';
+  }
+
+  container.innerHTML =
+    html;
+
+  updateStats();
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+  var all =
+    customers.length;
+
+  var due = 0;
+  var near = 0;
+  var late = 0;
+
+  for(
+    var i = 0;
+    i < customers.length;
+    i++
+  ){
+
+    var s =
+      getStatus(
+        customers[i]
+      );
+
+    if(s.cls === "red"){
+      due++;
+    }
+
+    if(s.cls === "orange"){
+      late++;
+    }
+
+    if(s.cls === "yellow"){
+      near++;
+    }
+  }
+
+  document.getElementById(
+    "statAll"
+  ).textContent = all;
+
+  document.getElementById(
+    "statDue"
+  ).textContent = due;
+
+  document.getElementById(
+    "statNear"
+  ).textContent = near;
+
+  document.getElementById(
+    "statLate"
+  ).textContent = late;
+}
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+function setFilter(filter){
+
+  currentFilter =
+    filter;
+
+  var ids = [
+    "filterAll",
+    "filterDue",
+    "filterNear",
+    "filterLate"
+  ];
+
+  for(
+    var i = 0;
+    i < ids.length;
+    i++
+  ){
+
+    document
+      .getElementById(
+        ids[i]
+      )
+      .classList.remove(
+        "active"
+      );
+  }
+
+  var selected =
+    "filterAll";
+
+  if(filter === "due"){
+    selected = "filterDue";
+  }
+
+  if(filter === "near"){
+    selected = "filterNear";
+  }
+
+  if(filter === "late"){
+    selected = "filterLate";
+  }
+
+  document
+    .getElementById(
+      selected
+    )
+    .classList.add(
+      "active"
+    );
+
+  renderCustomers();
+}
+
+/* =========================================================
+   CUSTOMER MODAL
+========================================================= */
+
+function openCustomerModal(){
+
+  document.getElementById(
+    "customerModalTitle"
+  ).textContent =
+    "افزودن مشتری";
+
+  document.getElementById(
+    "customerId"
+  ).value = "";
+
+  document.getElementById(
+    "name"
+  ).value = "";
+
+  document.getElementById(
+    "phone"
+  ).value = "";
+
+  document.getElementById(
+    "address"
+  ).value = "";
+
+  document.getElementById(
+    "deviceModel"
+  ).value = "";
+
+  document.getElementById(
+    "installDate"
+  ).value = "";
+
+  document.getElementById(
+    "lastService"
+  ).value =
+    todayJalali();
+
+  document.getElementById(
+    "serviceInterval"
+  ).value = "3";
+
+  document.getElementById(
+    "lastTds"
+  ).value = "";
+
+  document.getElementById(
+    "notes"
+  ).value = "";
+
+  document.getElementById(
+    "customerModal"
+  ).style.display =
+    "block";
+}
+
+function editCustomer(id){
+
+  var c =
+    customers.find(
+      function(x){
+
+        return String(x.id) ===
+          String(id);
+
+      }
+    );
+
+  if(!c){
+    return;
+  }
+
+  document.getElementById(
+    "customerModalTitle"
+  ).textContent =
+    "ویرایش مشتری";
+
+  document.getElementById(
+    "customerId"
+  ).value =
+    c.id;
+
+  document.getElementById(
+    "name"
+  ).value =
+    c.Name || "";
+
+  document.getElementById(
+    "phone"
+  ).value =
+    c.Phone || "";
+
+  document.getElementById(
+    "address"
+  ).value =
+    c.Address || "";
+
+  document.getElementById(
+    "deviceModel"
+  ).value =
+    c.Device_model || "";
+
+  document.getElementById(
+    "installDate"
+  ).value =
+    displayJalali(
+      c.Install_date || ""
+    );
+
+  document.getElementById(
+    "lastService"
+  ).value =
+    displayJalali(
+      c.last_service || ""
+    );
+
+  document.getElementById(
+    "serviceInterval"
+  ).value =
+    String(
+      c.service_interval || 3
+    );
+
+  document.getElementById(
+    "lastTds"
+  ).value =
+    c.last_tds || "";
+
+  document.getElementById(
+    "notes"
+  ).value =
+    c.notes || "";
+
+  document.getElementById(
+    "customerModal"
+  ).style.display =
+    "block";
+}
+
+/* =========================================================
+   SAVE CUSTOMER
+========================================================= */
+
+async function saveCustomer(){
+  var id=document.getElementById("customerId").value;
+  var name=document.getElementById("name").value.trim();
+  if(!name){alert("نام مشتری را وارد کنید.");return;}
+  var phone=document.getElementById("phone").value.trim();
+  var address=document.getElementById("address").value.trim();
+  var deviceModel=document.getElementById("deviceModel").value.trim();
+  var installDate=normalizeDateForStorage(document.getElementById("installDate").value);
+  var lastService=normalizeDateForStorage(document.getElementById("lastService").value);
+  var interval=Number(document.getElementById("serviceInterval").value);
+  var lastTds=document.getElementById("lastTds").value;
+  var notes=document.getElementById("notes").value.trim();
+  var nextService=addJalaliMonths(lastService,interval);
+  var payload={id:id||("local-"+Date.now()+"-"+Math.random().toString(36).slice(2,8)),Name:name,Phone:phone,Address:address,Device_model:deviceModel,Install_date:installDate,last_service:lastService,next_service:nextService,service_interval:interval,last_tds:lastTds===""?null:Number(lastTds),notes:notes};
+  await dbPut("customers",payload);
+  customers=await dbGetAll("customers");
+  closeModal("customerModal");
+  renderCustomers();
+}
+
+
+/* =========================================================
+   SERVICE MODAL
+========================================================= */
+
+function openServiceModal(id){
+
+  var c =
+    customers.find(
+      function(x){
+
+        return String(x.id) ===
+          String(id);
+
+      }
+    );
+
+  if(!c){
+    return;
+  }
+
+  document.getElementById(
+    "serviceCustomerId"
+  ).value =
+    c.id;
+
+  document.getElementById(
+    "serviceCustomerName"
+  ).textContent =
+    c.Name || "";
+
+  document.getElementById(
+    "serviceDate"
+  ).value =
+    todayJalali();
+
+  document.getElementById(
+    "serviceTds"
+  ).value =
+    c.last_tds || "";
+
+  document.getElementById(
+    "serviceIntervalModal"
+  ).value =
+    String(
+      c.service_interval || 3
+    );
+
+  document.getElementById(
+    "serviceModal"
+  ).style.display =
+    "block";
+}
+
+/* =========================================================
+   REPLACE LOCAL HISTORY
+
+   فقط آخرین سرویس قبلی مشتری نگه داشته می‌شود.
+   سابقه مشتری‌های دیگر دست‌نخورده می‌ماند.
+========================================================= */
+
+async function replaceLocalHistoryForCustomer(
+  customerId,
+  previousService
+){
+
+  var allHistory =
+    await dbGetAll(
+      "history"
+    );
+
+  var newHistory = [];
+
+  for(
+    var i = 0;
+    i < allHistory.length;
+    i++
+  ){
+
+    if(
+      String(
+        allHistory[i].customer_id
+      ) !==
+      String(customerId)
+    ){
+
+      newHistory.push(
+        allHistory[i]
+      );
+    }
+  }
+
+  if(previousService){
+
+    newHistory.push(
+      previousService
+    );
+  }
+
+  await dbClear(
+    "history"
+  );
+
+  for(
+    var j = 0;
+    j < newHistory.length;
+    j++
+  ){
+
+    await dbPut(
+      "history",
+      newHistory[j]
+    );
+  }
+
+  serviceHistory =
+    newHistory;
+}
+
+/* =========================================================
+   REGISTER SERVICE
+
+   منطق:
+   سرویس جدید = آخرین سرویس فعلی مشتری
+   وارد سابقه می‌شود.
+   خود سرویس جدید فقط در customers ثبت می‌شود.
+========================================================= */
+
+async function registerService(){
+  var customerId=document.getElementById("serviceCustomerId").value;
+  var serviceDate=normalizeDateForStorage(document.getElementById("serviceDate").value);
+  var tds=document.getElementById("serviceTds").value;
+  var interval=Number(document.getElementById("serviceIntervalModal").value);
+  if(!serviceDate){alert("تاریخ سرویس را وارد کنید.");return;}
+  var nextService=addJalaliMonths(serviceDate,interval);
+  var customer=customers.find(function(x){return String(x.id)===String(customerId);});
+  if(!customer){alert("مشتری پیدا نشد.");return;}
+  var previousService=null;
+  if(customer.last_service){previousService={id:"history-"+String(customerId)+"-"+String(customer.last_service),customer_id:customerId,service_date:normalizeDateForStorage(customer.last_service),tds:customer.last_tds===undefined||customer.last_tds===null||customer.last_tds===""?null:Number(customer.last_tds),service_interval:Number(customer.service_interval||3)};}
+  await replaceLocalHistoryForCustomer(customerId,previousService);
+  customer.last_service=serviceDate; customer.next_service=nextService; customer.service_interval=interval; customer.last_tds=tds===""?null:Number(tds);
+  await dbPut("customers",customer);
+  customers=await dbGetAll("customers"); serviceHistory=await dbGetAll("history");
+  closeModal("serviceModal"); renderCustomers();
+  alert("سرویس با موفقیت در حافظه دستگاه ذخیره شد.\n\nموعد بعدی: "+nextService);
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+async function showHistory(customerId){
+  var list=serviceHistory.filter(function(h){return String(h.customer_id)===String(customerId);});
+  list.sort(function(a,b){return jalaliSerial(b.service_date)-jalaliSerial(a.service_date);});
+  var html="";
+  if(!list.length){html='<div class="empty">سابقه‌ای برای این مشتری ثبت نشده است</div>';}else{for(var j=0;j<list.length;j++){var h=list[j];var tds=(h.tds===null||h.tds===undefined||h.tds==="")?"-":String(h.tds);html+='<div class="history-item"><div><b>📅 تاریخ:</b> '+escapeHtml(displayJalali(h.service_date))+'</div><div><b>📏 TDS:</b> '+escapeHtml(tds)+'</div><div><b>🔄 فاصله سرویس:</b> '+escapeHtml(String(h.service_interval||"-"))+' ماه</div></div>';}}
+  document.getElementById("historyContent").innerHTML=html; document.getElementById("historyModal").style.display="block";
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function dbDelete(storeName, key){
+  var db = await openDB();
+  return new Promise(function(resolve,reject){
+    var tx = db.transaction(storeName, "readwrite");
+    tx.objectStore(storeName).delete(key);
+    tx.oncomplete = function(){ resolve(); };
+    tx.onerror = function(){ reject(tx.error || new Error("خطا در حذف اطلاعات")); };
+    tx.onabort = function(){ reject(tx.error || new Error("عملیات حذف لغو شد")); };
+  });
+}
+
+async function deleteCustomer(id){
+  var c = customers.find(function(x){ return String(x.id) === String(id); });
+  if(!c) return;
+  if(!confirm("آیا از حذف «" + c.Name + "» مطمئن هستید؟")) return;
+
+  try{
+    await dbDelete("customers", id);
+
+    var allHistory = await dbGetAll("history");
+    var customerHistory = allHistory.filter(function(h){
+      return String(h.customer_id) === String(id);
+    });
+
+    for(var i=0; i<customerHistory.length; i++){
+      await dbDelete("history", customerHistory[i].id);
+    }
+
+    customers = await dbGetAll("customers");
+    serviceHistory = await dbGetAll("history");
+    renderCustomers();
+  }catch(e){
+    alert("حذف مشتری انجام نشد. لطفاً دوباره تلاش کنید.\n\n" + (e.message || e));
+  }
+}
+
+
+/* =========================================================
+   SYNC
+========================================================= */
+
+async function syncQueue(){ return; }
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function closeModal(id){
+
+  document.getElementById(
+    id
+  ).style.display =
+    "none";
+}
+
+window.addEventListener(
+  "click",
+  function(event){
+
+    var ids = [
+      "customerModal",
+      "serviceModal",
+      "historyModal"
+    ];
+
+    for(
+      var i = 0;
+      i < ids.length;
+      i++
+    ){
+
+      var el =
+        document.getElementById(
+          ids[i]
+        );
+
+      if(
+        event.target === el
+      ){
+
+        el.style.display =
+          "none";
+      }
+    }
+  }
+);
+
+/* =========================================================
+   CONNECTION
+========================================================= */
+
+function updateConnection(){var offline=document.getElementById("offlineBox");var online=document.getElementById("onlineBox");if(offline)offline.style.display="block";if(online)online.style.display="none";}
+
+
+window.addEventListener(
+  "online",
+  function(){
+
+    updateConnection();
+  }
+);
+
+window.addEventListener(
+  "offline",
+  function(){
+
+    updateConnection();
+  }
+);
+
+/* =========================================================
+   BACKUP / RESTORE
+========================================================= */
+async function exportBackup(){
+  var data={app:"مدیریت فیلتر لطف آبادی",version:"standalone-1.0",exported_at:new Date().toISOString(),customers:await dbGetAll("customers"),history:await dbGetAll("history")};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json;charset=utf-8"});
+  var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download="lotfabadi-backup-"+todayJalali().replaceAll("/","-")+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
+  alert("بکاپ با موفقیت ساخته شد.");
+}
+async function importBackup(file){
+  if(!file)return;
+  try{var data=JSON.parse(await file.text());if(!data||!Array.isArray(data.customers)||!Array.isArray(data.history))throw new Error("فرمت بکاپ معتبر نیست");if(!confirm("اطلاعات فعلی برنامه با این بکاپ جایگزین شود؟"))return;await dbClear("customers");await dbClear("history");for(var i=0;i<data.customers.length;i++)await dbPut("customers",data.customers[i]);for(var j=0;j<data.history.length;j++)await dbPut("history",data.history[j]);customers=data.customers;serviceHistory=data.history;renderCustomers();alert("بکاپ با موفقیت بازیابی شد.\n\nتعداد مشتریان: "+customers.length);}catch(e){alert("خطا در بازیابی بکاپ: "+(e.message||e));}finally{var input=document.getElementById("importFile");if(input)input.value="";}}
+
+/* =========================================================
+   INIT
+========================================================= */
+
+async function init(){
+
+  updateConnection();
+
+  try{
+
+    await loadServerData();
+
+  }catch(e){
+
+    console.log(
+      "Init error",
+      e
+    );
+  }
+}
+
+init();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("./sw.js").catch(function () {});
+  });
+}
+</script>
+
+</body>
+</html>
