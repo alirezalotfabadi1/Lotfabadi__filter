@@ -1,0 +1,12 @@
+{
+  "name": "مدیریت فیلتر لطف آبادی",
+  "short_name": "لطف آبادی",
+  "description": "مدیریت مشتریان و سرویس فیلتر آب",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#0f766e",
+  "dir": "rtl",
+  "lang": "fa"
+}
